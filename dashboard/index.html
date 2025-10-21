@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pothole Detection System - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pothole Detection System</h1>
+            <div class="connection-status">
+                <span id="wifi-status" class="status-badge">WiFi: <span id="wifi-state">Disconnected</span></span>
+                <span id="ble-status" class="status-badge">BLE: <span id="ble-state">Not Available</span></span>
+            </div>
+        </header>
+
+        <main>
+            <!-- Connection Section -->
+            <section class="card connection-section">
+                <h2>Connection</h2>
+                <div class="connection-controls">
+                    <button id="connect-wifi" class="btn btn-primary">Connect to Giga WiFi AP</button>
+                    <button id="check-ble" class="btn btn-secondary" disabled>Check BLE Support</button>
+                </div>
+                <div id="connection-info" class="info-message"></div>
+            </section>
+
+            <!-- Sensor Grid Section -->
+            <section class="card sensor-section">
+                <h2>Sensor Status</h2>
+                <div class="sensor-grid">
+                    <!-- Left sensors (L8-L1) -->
+                    <div class="sensor-column left-sensors">
+                        <h3>Left Side</h3>
+                        <div class="sensors-list">
+                            <div class="sensor-item" data-sensor="L8">
+                                <div class="sensor-indicator" id="sensor-L8"></div>
+                                <span class="sensor-label">L8</span>
+                                <button class="btn-icon poll-btn" data-sensor="L8" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L8" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L7">
+                                <div class="sensor-indicator" id="sensor-L7"></div>
+                                <span class="sensor-label">L7</span>
+                                <button class="btn-icon poll-btn" data-sensor="L7" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L7" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L6">
+                                <div class="sensor-indicator" id="sensor-L6"></div>
+                                <span class="sensor-label">L6</span>
+                                <button class="btn-icon poll-btn" data-sensor="L6" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L6" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L5">
+                                <div class="sensor-indicator" id="sensor-L5"></div>
+                                <span class="sensor-label">L5</span>
+                                <button class="btn-icon poll-btn" data-sensor="L5" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L5" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L4">
+                                <div class="sensor-indicator" id="sensor-L4"></div>
+                                <span class="sensor-label">L4</span>
+                                <button class="btn-icon poll-btn" data-sensor="L4" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L4" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L3">
+                                <div class="sensor-indicator" id="sensor-L3"></div>
+                                <span class="sensor-label">L3</span>
+                                <button class="btn-icon poll-btn" data-sensor="L3" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L3" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L2">
+                                <div class="sensor-indicator" id="sensor-L2"></div>
+                                <span class="sensor-label">L2</span>
+                                <button class="btn-icon poll-btn" data-sensor="L2" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L2" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="L1">
+                                <div class="sensor-indicator" id="sensor-L1"></div>
+                                <span class="sensor-label">L1</span>
+                                <button class="btn-icon poll-btn" data-sensor="L1" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="L1" title="Configure">⚙️</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right sensors (R1-R8) -->
+                    <div class="sensor-column right-sensors">
+                        <h3>Right Side</h3>
+                        <div class="sensors-list">
+                            <div class="sensor-item" data-sensor="R1">
+                                <div class="sensor-indicator" id="sensor-R1"></div>
+                                <span class="sensor-label">R1</span>
+                                <button class="btn-icon poll-btn" data-sensor="R1" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R1" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R2">
+                                <div class="sensor-indicator" id="sensor-R2"></div>
+                                <span class="sensor-label">R2</span>
+                                <button class="btn-icon poll-btn" data-sensor="R2" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R2" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R3">
+                                <div class="sensor-indicator" id="sensor-R3"></div>
+                                <span class="sensor-label">R3</span>
+                                <button class="btn-icon poll-btn" data-sensor="R3" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R3" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R4">
+                                <div class="sensor-indicator" id="sensor-R4"></div>
+                                <span class="sensor-label">R4</span>
+                                <button class="btn-icon poll-btn" data-sensor="R4" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R4" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R5">
+                                <div class="sensor-indicator" id="sensor-R5"></div>
+                                <span class="sensor-label">R5</span>
+                                <button class="btn-icon poll-btn" data-sensor="R5" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R5" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R6">
+                                <div class="sensor-indicator" id="sensor-R6"></div>
+                                <span class="sensor-label">R6</span>
+                                <button class="btn-icon poll-btn" data-sensor="R6" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R6" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R7">
+                                <div class="sensor-indicator" id="sensor-R7"></div>
+                                <span class="sensor-label">R7</span>
+                                <button class="btn-icon poll-btn" data-sensor="R7" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R7" title="Configure">⚙️</button>
+                            </div>
+                            <div class="sensor-item" data-sensor="R8">
+                                <div class="sensor-indicator" id="sensor-R8"></div>
+                                <span class="sensor-label">R8</span>
+                                <button class="btn-icon poll-btn" data-sensor="R8" title="Poll Sensor">📡</button>
+                                <button class="btn-icon config-btn" data-sensor="R8" title="Configure">⚙️</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-indicator low"></div>
+                        <span>LOW (Normal)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-indicator high"></div>
+                        <span>HIGH (Pothole Detected)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-indicator unknown"></div>
+                        <span>Unknown</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sensor Details Section -->
+            <section class="card details-section" id="sensor-details" style="display: none;">
+                <h2>Sensor Details: <span id="detail-sensor-name"></span></h2>
+                <div class="details-content">
+                    <div class="detail-row">
+                        <label>Current Distance:</label>
+                        <span id="detail-distance" class="detail-value">--</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Zero Reference:</label>
+                        <span id="detail-zero" class="detail-value">--</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Threshold:</label>
+                        <span id="detail-threshold" class="detail-value">--</span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Status:</label>
+                        <span id="detail-status" class="detail-value">--</span>
+                    </div>
+                </div>
+                <button id="close-details" class="btn btn-secondary">Close</button>
+            </section>
+
+            <!-- Events Log Section -->
+            <section class="card events-section">
+                <h2>Recent Events</h2>
+                <div id="events-log" class="events-log">
+                    <p class="no-events">No events recorded yet.</p>
+                </div>
+                <button id="clear-events" class="btn btn-secondary">Clear Log</button>
+            </section>
+        </main>
+
+        <!-- Configuration Modal -->
+        <div id="config-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Configure Sensor: <span id="config-sensor-name"></span></h2>
+                    <button class="modal-close" id="close-config">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="config-zero">Zero Reference (cm):</label>
+                        <input type="number" id="config-zero" class="form-input" step="0.1" min="0">
+                        <button id="set-zero" class="btn btn-primary">Set Current as Zero</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="config-threshold">Threshold (cm):</label>
+                        <input type="number" id="config-threshold" class="form-input" step="0.1" min="0" value="5.0">
+                        <small class="form-help">Pothole detection threshold (default: 5.0 cm)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Reading:</label>
+                        <div id="config-current-reading" class="detail-value">--</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-config" class="btn btn-primary">Save Configuration</button>
+                    <button id="cancel-config" class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
