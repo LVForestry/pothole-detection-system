@@ -16,6 +16,14 @@ const path = require('path');
 
 const PORT = 8080;
 
+// Allowed files to serve (safelist)
+const ALLOWED_FILES = {
+    '/': 'index.html',
+    '/index.html': 'index.html',
+    '/styles.css': 'styles.css',
+    '/app.js': 'app.js'
+};
+
 // Mock sensor states
 const sensorStates = {
     R1: { status: 'low' },
@@ -89,10 +97,18 @@ const server = http.createServer((req, res) => {
     }
     
     // Serve static files
-    let filePath = '.' + req.url;
-    if (filePath === './') {
-        filePath = './index.html';
+    let requestPath = req.url.split('?')[0]; // Remove query parameters
+    
+    // Check if the requested path is in the allowed list
+    const allowedFile = ALLOWED_FILES[requestPath];
+    if (!allowedFile) {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end('<h1>404 Not Found</h1>', 'utf-8');
+        return;
     }
+    
+    // Build safe file path
+    const filePath = path.join(__dirname, allowedFile);
     
     const extname = String(path.extname(filePath)).toLowerCase();
     const contentType = mimeTypes[extname] || 'application/octet-stream';
