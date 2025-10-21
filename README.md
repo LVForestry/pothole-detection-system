@@ -32,6 +32,13 @@ System Architecture:
        * Viewing the HIGH/LOW state of all sensors in real time
        * Polling individual sensors for live data via BLE
        * Setting/calibrating zero and threshold values (persisted to each Nano)
+   - Dashboard features:
+       * Responsive design for mobile and desktop devices
+       * Real-time sensor status monitoring with color-coded indicators
+       * BLE communication for individual sensor polling and configuration
+       * Event logging for pothole detection and system activities
+       * Intuitive configuration interface with modal dialogs
+   - See [dashboard/README.md](dashboard/README.md) for detailed documentation
 
 Naming and Pin Mapping:
 - Sensor names: R1–R8 (right), L8–L1 (left).
