@@ -18,6 +18,31 @@ static const char INDEX_HTML[] = R"rawliteral(
   </div>
 
   <script>
+    // Fonction pour calibrer un capteur
+    function calibrateSensor(sensorName) {
+      console.log('Calibration du capteur :', sensorName);
+      fetch(`/calibrate?sensorId=${encodeURIComponent(sensorName)}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur avec la requête de calibration');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Réponse de calibration :', data);
+          if (data.ok) {
+            alert(`Capteur ${sensorName} calibré avec succès !`);
+            refreshSensors();
+          } else {
+            alert(`Erreur lors de la calibration du capteur ${sensorName}: ${data.error || 'Erreur inconnue'}`);
+          }
+        })
+        .catch(error => {
+          console.error('Erreur lors de la calibration :', error);
+          alert(`Erreur lors de la calibration du capteur ${sensorName}`);
+        });
+    }
+
     // Fonction pour actualiser la liste des capteurs
     function refreshSensors() {
       console.log('Envoi de requête pour /sensors');
@@ -47,6 +72,12 @@ static const char INDEX_HTML[] = R"rawliteral(
                 div.innerHTML += `<br><em style="color:gray;">Erreur : ${sensor.error}</em>`;
               }
             }
+            // Ajouter le bouton "Calibrer"
+            const calibrateBtn = document.createElement('button');
+            calibrateBtn.textContent = 'Calibrer';
+            calibrateBtn.style.marginLeft = '10px';
+            calibrateBtn.onclick = () => calibrateSensor(sensor.name);
+            div.appendChild(calibrateBtn);
             container.appendChild(div);
           });
         })
@@ -101,7 +132,44 @@ void wifi_ap_handleClients() {
   Serial.println(reqLine);
 
   // Traiter la requête
-  if (reqLine.startsWith("GET /sensors")) {
+  if (reqLine.startsWith("GET /calibrate")) {
+    Serial.println("Traitement de /calibrate...");
+    
+    // Extraire le paramètre sensorId de l'URL
+    int sensorIdStart = reqLine.indexOf("sensorId=");
+    String sensorId = "";
+    if (sensorIdStart >= 0) {
+      sensorIdStart += 9; // Longueur de "sensorId="
+      int sensorIdEnd = reqLine.indexOf(" ", sensorIdStart);
+      if (sensorIdEnd < 0) {
+        sensorIdEnd = reqLine.indexOf("&", sensorIdStart);
+      }
+      if (sensorIdEnd < 0) {
+        sensorIdEnd = reqLine.length();
+      }
+      sensorId = reqLine.substring(sensorIdStart, sensorIdEnd);
+      // Décoder les caractères encodés en URL (basique)
+      sensorId.replace("%20", " ");
+    }
+    
+    String jsonResponse;
+    if (sensorId.length() > 0) {
+      Serial.print("Calibration du capteur : ");
+      Serial.println(sensorId);
+      jsonResponse = sensor_calibrate(sensorId);
+    } else {
+      jsonResponse = "{\"ok\":false,\"error\":\"Paramètre sensorId manquant\"}";
+    }
+    
+    client.print("HTTP/1.1 200 OK\r\n");
+    client.print("Content-Type: application/json\r\n");
+    client.print("Connection: close\r\n");
+    client.print("Content-Length: ");
+    client.print(jsonResponse.length());
+    client.print("\r\n\r\n");
+    client.print(jsonResponse);
+    Serial.println("Réponse de calibration envoyée");
+  } else if (reqLine.startsWith("GET /sensors")) {
     Serial.println("Traitement de /sensors...");
     String jsonResponse = sensor_manager_getSummaryJson();
     client.print("HTTP/1.1 200 OK\r\n");
