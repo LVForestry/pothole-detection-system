@@ -12,6 +12,10 @@ void sensor_manager_init();
 // [{"name":"L1","threshold":40}, {"name":"L2","threshold":...}]
 String sensor_manager_getSummaryJson();
 
+// Fonction temporaire de calibration pour simuler l'opération
+// Retourne JSON {"ok":true} ou {"ok":false,"error":"..."}
+String sensor_calibrate(const String &sensorId);
+
 // Pour la calibration manuelle via HTTP : connecte au capteur (utilise fichier X.mac)
 // retourne JSON {"ok":true} ou {"ok":false,"error":"..."}
 String sensor_manager_calibConnect(const String &name);

@@ -156,3 +156,30 @@ String sensor_manager_getSummaryJson() {
   out += "]";
   return out;
 }
+
+// Fonction temporaire de calibration pour simuler l'opération
+String sensor_calibrate(const String &sensorId) {
+  Serial.print("Calibration demandée pour le capteur : ");
+  Serial.println(sensorId);
+  
+  // Vérifier si le capteur existe
+  bool sensorFound = false;
+  for (int i = 0; i < _sensorCount; ++i) {
+    if (_sensors[i].name == sensorId) {
+      sensorFound = true;
+      break;
+    }
+  }
+  
+  if (!sensorFound) {
+    return "{\"ok\":false,\"error\":\"Capteur non trouvé\"}";
+  }
+  
+  // Simulation : retourner succès
+  // Dans une implémentation réelle, on pourrait appeler:
+  // sensor_manager_calibConnect, calibRead, calibSetAndPersist, calibDisconnect
+  Serial.print("Calibration simulée pour : ");
+  Serial.println(sensorId);
+  
+  return "{\"ok\":true,\"message\":\"Calibration simulée avec succès\"}";
+}
