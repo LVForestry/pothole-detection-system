@@ -1,55 +1,86 @@
-# pothole-detection-system
+# RoadScanner
 
-pothole-detection-system
+RoadScanner is an embedded system based on Arduino Giga R1 WiFi for real-time monitoring of road sensors (L1 to L8, R1 to R8). It uses BLE to communicate with Nano 33 BLE Sense sensors, GNSS for geolocation, and an SD card for logging alarms. Ideal for road or agricultural monitoring.
 
-Project Overview:
-A distributed system for real-time detection and reporting of potholes (deeper than 5cm) on roads, using multiple LIDAR sensors and microcontrollers, with remote monitoring and configuration via a web dashboard.
+## Features
 
-System Architecture:
+- **Alarm Monitoring**: Automatic detection of alarms on 16 sensors (L1-L8, R1-R8) with SD logging of data (date, time, lat/lon, speed, direction).
+- **BLE Communication**: Central connection to BLE peripherals (Nano 33 BLE Sense) to read distances and calibrate thresholds.
+- **Integrated GNSS**: GPS positioning with u-blox Zed F9P for precise logs (outdoor use).
+- **SD Logging**: Saves alarms in short files (e.g., 271025.txt) for FAT16/FAT32 compatibility.
+- **Serial Interface**: User commands for BLE connection, reading, and calibration.
 
-1. Sensor Nodes:
-   - 16 nodes, each combining a TFLuna LIDAR sensor and an Arduino Nano 33 BLE.
-   - Sensors are positioned in two lines: R1–R8 (right), L8–L1 (left).
-   - Each Nano reads its LIDAR via I2C, processes the distance data, and outputs a digital HIGH on pin 2 to indicate a pothole (distance drop beyond threshold), holding HIGH for 2 seconds after the event.
-   - Each Nano responds to BLE requests:
-       * Provides real-time distance
-       * Updates/stores zero reference and threshold values in flash
-   - Each Nano advertises a unique BLE name (e.g., "NanoTFluna-R1").
+## Required Hardware
 
-2. Central Controller:
-   - Arduino Giga R1 as the core controller.
-   - Monitors 16 digital input pins (23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53), mapped to the 16 Nanos.
-   - Logs sensor events to serial when any input goes HIGH.
-   - Polls/configures each Nano over BLE for live readings, zeroing, and threshold changes.
+- Arduino Giga R1 WiFi
+- u-blox Zed F9P GNSS module (connected via I2C: SDA D20, SCL D21, 3.3V, GND)
+- SD card (FAT32 formatted, connected via SPI: CS D10, MOSI D11, MISO D12, SCK D13)
+- Nano 33 BLE Sense sensors (BLE peripherals)
+- Cables for alarms (16 digital pins: D53, D51, D49, D47, D45, D43, D41, D39, D37, D35, D33, D31, D29, D27, D25, D23)
 
-3. Communication:
-   - Nano ↔ TFLuna: I2C for distance measurement.
-   - Nano ↔ Giga: Digital output (event alert) and BLE (data/config/debug).
+## Required Software
 
-4. Web Dashboard:
-   - Giga R1 creates an open WiFi Access Point (no password required).
-   - Serves a web interface for:
-       * Viewing the HIGH/LOW state of all sensors in real time
-       * Polling individual sensors for live data via BLE
-       * Setting/calibrating zero and threshold values (persisted to each Nano)
+- Arduino IDE 2.x
+- Libraries:
+  - ArduinoBLE
+  - SparkFun u-blox GNSS Arduino Library
+  - NanoBLEFlashPrefs (for Nano)
+  - TFLI2C (for Nano)
 
-Naming and Pin Mapping:
-- Sensor names: R1–R8 (right), L8–L1 (left).
-- Giga digital input pin mapping: R1=23, R2=25, ..., R8=37, L8=39, ..., L1=53.
-- Each Nano BLE device is uniquely named (e.g., "NanoTFluna-R1", etc).
+## Installation
 
-User Interaction:
-- User connects to the Giga’s WiFi AP and opens the web dashboard.
-- Can view sensor states, get real-time readings, and update calibration or thresholds.
+1. Clone this repo: `git clone https://github.com/LVForestry/pothole-detection-system.git`
+2. Open the sketches in Arduino IDE:
+   - `RSngGigav4.ino` for Giga R1 (central)
+   - `RSngNanoV4.ino` for Nano (peripheral)
+3. Install libraries via Library Manager.
+4. Flash the codes onto the boards.
+5. Connect hardware as described.
 
-Requirements:
-- Detection of potholes deeper than 5cm (configurable threshold).
-- Robust, real-time digital and BLE communication.
-- Local, passwordless WiFi access and web monitoring.
-- All settings persist across power cycles (flash storage on Nanos).
+## Usage
 
-Open Points:
-- BLE protocol details (characteristics, UUIDs) for Nano–Giga config/data exchange.
-- Dashboard extensibility for logging, export, or analytics.
+### Startup
+- Power the Giga R1.
+- Open Serial Monitor (115200 baud).
+- System initializes GNSS, SD, and BLE.
+- Indoors: "No GPS fix after 10s" (normal).
+- Outdoors: GPS fix obtained.
 
-End of summary.
+### BLE Connection
+- Type "L1" in serial to connect to sensor L1.
+- Once connected:
+  - "READ": Reads distance.
+  - "CALxxx": Calibrates threshold (e.g., CAL1000 for 1000mm).
+
+### Alarms
+- Alarms trigger on LOW on pins.
+- Automatic log: DDMMYY.txt file with GPS data.
+
+### Debugging
+- Serial shows: GNSS connection, SD OK, alarms.
+- No alarms at init due to inhibition.
+
+## Code Structure
+
+- `RSngGigav4.ino`: Main loop (BLE central, alarms).
+- `BLEManager.cpp/h`: BLE management.
+- `AlarmeManager.cpp/h`: Alarm monitoring and SD logging.
+- `RSngNanoV4.ino`: BLE peripheral with TFLuna for distance.
+
+## SD Logs Example
+
+```
+L2,27-10-2025,14:30:00,45.1234567,-75.9876543,50.00,180.00
+```
+
+## Contribution
+
+Issues and PRs welcome! For bugs or features, open an issue.
+
+## License
+
+MIT License - see LICENSE.
+
+## Author
+
+LVForestry
