@@ -48,8 +48,56 @@ Requirements:
 - Local, passwordless WiFi access and web monitoring.
 - All settings persist across power cycles (flash storage on Nanos).
 
-Open Points:
-- BLE protocol details (characteristics, UUIDs) for Nano–Giga config/data exchange.
-- Dashboard extensibility for logging, export, or analytics.
+## Implementation Status
+
+### ✅ Completed - Central Controller (Giga R1)
+
+The Arduino Giga R1 central controller firmware is fully implemented and ready for deployment:
+
+- **Location**: [`firmware/giga_r1_central_controller/`](firmware/giga_r1_central_controller/)
+- **Features**:
+  - ✅ 16 digital input pin monitoring (pins 23-53)
+  - ✅ Serial logging of pothole detection events
+  - ✅ BLE communication (scan, poll, configure sensor nodes)
+  - ✅ WiFi Access Point ("Pothole-Detection-AP")
+  - ✅ Web dashboard with real-time monitoring
+  - ✅ HTTP API for system integration
+  - ✅ Sensor polling and configuration via BLE
+
+### 📋 BLE Protocol Specification
+
+The system uses standardized BLE characteristics for Nano-Giga communication:
+
+**Service UUID**: `19b10000-e8f2-537e-4f6c-d104768a1214`
+
+**Characteristics**:
+- Distance (Read): `19b10001-e8f2-537e-4f6c-d104768a1214` - Float (4 bytes) in cm
+- Zero Reference (Write): `19b10002-e8f2-537e-4f6c-d104768a1214` - Float (4 bytes) in cm
+- Threshold (Write): `19b10003-e8f2-537e-4f6c-d104768a1214` - Float (4 bytes) in cm
+
+### 📚 Documentation
+
+Comprehensive documentation available in the firmware directory:
+
+- **[Quick Start Guide](firmware/QUICKSTART.md)** - Get running in 15 minutes
+- **[Installation Guide](firmware/INSTALLATION.md)** - Complete setup instructions
+- **[Architecture](firmware/ARCHITECTURE.md)** - System design and implementation
+- **[Examples](firmware/EXAMPLES.md)** - API usage and integration patterns
+- **[Main README](firmware/README.md)** - Overview and feature list
+
+### 🚀 Getting Started
+
+1. Navigate to [`firmware/giga_r1_central_controller/`](firmware/giga_r1_central_controller/)
+2. Follow the [Quick Start Guide](firmware/QUICKSTART.md)
+3. Upload firmware to Arduino Giga R1 WiFi
+4. Connect to "Pothole-Detection-AP" WiFi network
+5. Access dashboard at http://192.168.4.1/
+
+### 🔧 Next Steps
+
+- **Sensor Node Firmware**: Develop Arduino Nano 33 BLE firmware for sensor nodes
+- **Field Deployment**: Install and calibrate sensors on target roads
+- **System Testing**: Validate detection accuracy and reliability
+- **Dashboard Enhancements**: Add data logging, analytics, and export features
 
 End of summary.
