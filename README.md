@@ -62,7 +62,7 @@ RoadScanner is an embedded system based on Arduino Giga R1 WiFi for real-time mo
 
 ## Code Structure
 
-- `RSngGigav4.ino`: Main loop (BLE central, alarms).
+- `RSngGigav6.ino`: Main loop (BLE central, alarms).
 - `BLEManager.cpp/h`: BLE management.
 - `AlarmeManager.cpp/h`: Alarm monitoring and SD logging.
 - `RSngNanoV4.ino`: BLE peripheral with TFLuna for distance.
